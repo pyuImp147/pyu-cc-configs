@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Claude Code runtime (must never enter this repo)
+.credentials.json
+*.log
+sessions/
+projects/
+session-data/
+session-env/
+shell-snapshots/
+cache/
+backups/
+file-history/
+paste-cache/
+homunculus/
+metrics/
+.session-stats.json*
+stats-cache.json
+policy-limits.json
+mcp-needs-auth-cache.json
+
+# OMC / ECC runtime state (hooks auto-create when CC runs inside this dir)
+.omc/
+.omc-config.json
+.last-cleanup
+ide/
+tasks/
+teams/

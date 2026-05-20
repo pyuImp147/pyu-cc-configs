@@ -1,0 +1,4 @@
+- [Active sbatch monitoring](feedback_sbatch_active_monitor.md) — after every sbatch submit, actively monitor log+squeue, fix+resubmit on errors, never passively wait
+- [Data convention direct test](feedback_data_convention_direct_test.md) — for axis/coord/unit-convention claims, build raw-input→physical-output closed-loop test; never cite our own preprocess/sanity-check code
+- [Hardlink vs symlink check](feedback_hardlink_vs_symlink_check.md) — never use `ls -i` alone to identify hard links; always `ls -la` for file-type marker before any rm on shared storage
+- [pyu-delete no size probe](feedback_pyu_delete_no_size_probe.md) — when running /pyu-delete, skip `du -sh`/`find|wc` on target; it's the exact slow op the skill exists to bypass
