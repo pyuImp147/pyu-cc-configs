@@ -2,6 +2,8 @@
 
 跨 host 复刻当前 CoreWeave cluster 上 `~/.claude/` 内**与 cluster/conda 环境无关**的 Claude Code 配置（人格 + 跨项目准则 + 自定义 skill）。
 
+> **要在 mac 上 setup？** 把 `MAC_SETUP.md` 喂给 Claude Code，让它按步骤帮你 merge。一行：`Read ~/pyu-claude-all/MAC_SETUP.md and execute it`。
+
 源 host：CoreWeave SLURM cluster (`/mnt/home/pengcheng.yu/.claude/`)
 目标 host：新 cluster / 本地 mac
 Repo: `git@github.com:pyuImp147/pyu-cc-configs.git` (**private**)
