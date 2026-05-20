@@ -75,7 +75,14 @@ Generated: 2026-05-20
 |---|---|
 | `~/.claude/cluster_env.md` | 全文已并入 `optional/cluster-snippets/cluster-env.md`。原文件**不**单独同步，避免双源。 |
 
-## 6. 其他
+## 6. Auto-regenerated index files（**有意不同步** — Claude 自动重建）
+
+| 路径 | 处理 |
+|---|---|
+| `~/.claude/memory/MEMORY.md` | 顶层 auto-memory index，Claude 新 host 启动会按 feedback 文件自动重建。同步反而易过时。 |
+| `~/.claude/projects/<hash>/memory/MEMORY.md` | 项目级 auto-memory index，同上 |
+
+## 7. 其他
 
 | 路径 | 理由 |
 |---|---|

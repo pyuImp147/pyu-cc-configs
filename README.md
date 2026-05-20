@@ -24,22 +24,26 @@ Repo: `git@github.com:pyuImp147/pyu-cc-configs.git` (**private**)
 ~/pyu-claude-all/
 ├── README.md                   ← 你正在看
 ├── core/                       ← MUST replicate
-│   ├── README.md                ← merge to ~/.claude/CLAUDE.md
-│   ├── CLAUDE.md                ← portable 全局指令（已去除 SLURM / cluster 块）
-│   └── memory/                  ← auto-memory（仅 portable 部分）
+│   ├── README.md
+│   ├── CLAUDE.md                ← portable 全局指令（已去除 SLURM / cluster / imp_genai 块）
+│   ├── memory/                  ← portable feedback (markdown style / data convention test)
+│   └── skills-templates/
+│       └── pyu-harness-setup-generic/  ← env-agnostic 版 harness bootstrap
 ├── rules/                      ← MUST replicate
-│   ├── common/                  ← 12 个跨语言/跨项目 rule docs
+│   ├── common/                  ← 12 个跨语言/跨项目 rule docs (paper-evidence 已 genericized)
 │   └── python/                  ← 5 个 Python 专属 rule docs
-├── skills/                     ← MUST replicate (user-authored only)
-│   ├── pyu-harness-setup/
+├── skills/                     ← MUST replicate (user-authored, env-agnostic 部分)
 │   ├── pyu-delete/             ← SLURM-only runtime（mac 上仅定义存在）
 │   ├── pyu-exp-monitor/        ← SLURM-only runtime
 │   ├── pyu-exp-team/           ← SLURM-only runtime
 │   └── pyu-traj-vis/           ← 跨环境可用
 ├── optional/
-│   └── cluster-snippets/       ← 仅 SLURM cluster 启用
-│       ├── README.md            ← 怎么 cat >> 到 CLAUDE.md
+│   └── cluster-snippets/       ← 仅 CoreWeave 环境启用
+│       ├── README.md
 │       ├── cluster-env.md       ← SLURM/conda/HF_HOME/shared paths
+│       ├── paper-evidence-projects.md  ← imp_genai-d4rt-v1 / TrackingModel_Gallery 项目 lookup
+│       ├── skills/
+│       │   └── pyu-harness-setup-coreweave/  ← 原 pyu-harness-setup，CoreWeave 深耦合版
 │       └── memory/              ← cluster-specific feedback (sbatch/hardlink/...)
 └── _audit/
     ├── MANIFEST.md             ← 每个被同步的文件 + 源路径 + 分类
@@ -66,21 +70,22 @@ git clone git@github.com:pyuImp147/pyu-cc-configs.git ~/pyu-claude-all
 cat ~/pyu-claude-all/core/CLAUDE.md >> ~/.claude/CLAUDE.md
 cat ~/pyu-claude-all/optional/cluster-snippets/cluster-env.md >> ~/.claude/CLAUDE.md
 
-# 4. Rules（直接覆盖到 ~/.claude/rules/）
+# 4. Rules
 cp -rn ~/pyu-claude-all/rules/common ~/.claude/rules/
 cp -rn ~/pyu-claude-all/rules/python ~/.claude/rules/
-# 注：-n = no-clobber，保留 ECC 已装的版本；若想强制覆盖去掉 -n
+# paper-evidence 项目特定附录（CoreWeave 才需要）
+cp ~/pyu-claude-all/optional/cluster-snippets/paper-evidence-projects.md ~/.claude/rules/common/
 
-# 5. 自定义 skills
+# 5. 自定义 skills（4 个 env-agnostic 的 + CoreWeave 版 harness）
 cp -r ~/pyu-claude-all/skills/* ~/.claude/skills/
+cp -r ~/pyu-claude-all/optional/cluster-snippets/skills/pyu-harness-setup-coreweave ~/.claude/skills/pyu-harness-setup
 
-# 6. Memory (auto-memory): merge to the project-scoped memory dir
-#    当前 cluster 的位置是 ~/.claude/projects/-mnt-home-<user>-<workdir>/memory/
-#    新 cluster 上路径不同 — 自行 cp 到对应 projects 子目录。
+# 6. Memory
 PROJ=~/.claude/projects/-mnt-home-<user>-<workdir>/memory
 mkdir -p $PROJ
 cp ~/pyu-claude-all/core/memory/*.md $PROJ/
 cp ~/pyu-claude-all/optional/cluster-snippets/memory/*.md $PROJ/
+# 注：MEMORY.md 不需要拷贝 — Claude 启动时会自动按目录里 feedback 重建 index
 ```
 
 ### B. 本地 mac
@@ -98,16 +103,18 @@ cat ~/pyu-claude-all/core/CLAUDE.md >> ~/.claude/CLAUDE.md
 # 4. Rules
 cp -rn ~/pyu-claude-all/rules/common ~/.claude/rules/
 cp -rn ~/pyu-claude-all/rules/python ~/.claude/rules/
+# 不要拷 paper-evidence-projects.md（那是 CoreWeave 专属）
 
-# 5. 自定义 skills
+# 5. 自定义 skills (4 个 env-agnostic 的 + generic 版 harness skeleton)
 # 注意: pyu-delete / pyu-exp-monitor / pyu-exp-team 依赖 SLURM，mac 上调起会报错（预期）
 cp -r ~/pyu-claude-all/skills/* ~/.claude/skills/
+cp -r ~/pyu-claude-all/core/skills-templates/pyu-harness-setup-generic ~/.claude/skills/pyu-harness-setup
 
 # 6. Memory
 PROJ=~/.claude/projects/<your-project-key>/memory
 mkdir -p $PROJ
 cp ~/pyu-claude-all/core/memory/*.md $PROJ/
-# 不加 optional/cluster-snippets/memory/
+# 不加 optional/cluster-snippets/memory/，不加 MEMORY.md（auto-regenerated）
 ```
 
 ---

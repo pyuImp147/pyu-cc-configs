@@ -45,10 +45,11 @@ IF I ask for a summary, overview, or simple comparison: Keep the response high-l
 **ANY question about paper content** — architecture details, layer counts, training hyperparams, benchmark numbers, ablation results, method specifics — MUST follow evidence-first protocol:
 
 1. **Do NOT answer from context / memory / prior conversation** — always re-read the original paper.
-2. **Locate the raw paper** (project-specific locations):
-   - `imp_genai-d4rt-v1`: `research/scene4d/feed_forward_tracker/docs/papers/<PaperName>/paper-raw.md` (一手原文转录). 二手笔记在同目录的 `<PaperName>.md`. ⚠ **`docs/` 被 `.gitignore` 屏蔽** → Glob / Grep 工具看不见，必须用 `Read` 精确路径或 `Bash ls` / `Bash grep` 绕开。
-   - `TrackingModel_Gallery`: `docs/papers_raw/*.{pdf,txt}`
+2. **Locate the raw paper** in the project's documented location:
+   - Common conventions: `docs/papers/<PaperName>/paper-raw.md` (per-paper md 转录) 或 `docs/papers_raw/*.{pdf,txt}` (legacy pdf+txt 格式)。
+   - ⚠ 部分项目把 `docs/` 加进 `.gitignore` → Glob / Grep 工具看不见，需要用 `Read` 精确路径或 `Bash ls` / `Bash grep` 绕开。
    - Other projects: grep for `*.pdf` under `docs/`/`papers/` or ask user.
+   - **项目特定 lookup table（当前 cluster 上的 imp_genai-d4rt-v1 / TrackingModel_Gallery 等）见 `optional/cluster-snippets/paper-evidence-projects.md`**。
 3. **Read specific evidence** — for `.md` paper-raw: grep keywords with `Bash grep` (Grep tool 受 gitignore 影响), Read sections directly. For legacy `.pdf` / `.txt`: Read `.pdf` with pages=, grep `.txt`.
 4. **Answer with evidence block**:
    ```

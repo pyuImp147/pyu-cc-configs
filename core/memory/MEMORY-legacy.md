@@ -1,1 +1,0 @@
-- [Markdown writing style](feedback_md_toc.md) — TOC at top, 中文 prose + English for code/identifiers/math, blockquote header below title, follow d4rt docs as reference style

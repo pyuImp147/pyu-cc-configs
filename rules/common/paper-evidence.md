@@ -25,20 +25,21 @@
 
 ### 1. 定位原文文件
 
-| 项目 | paper 原文位置 |
+| 项目格式 | paper 原文位置惯例 |
 |---|---|
-| `imp_genai-d4rt-v1` | `research/scene4d/feed_forward_tracker/docs/papers/<PaperName>/paper-raw.md` |
-| `TrackingModel_Gallery` | `docs/papers_raw/*.{pdf,txt}` |
-| 其他项目 | grep `find . -name "*.pdf" -path "*paper*"` 或询问 user |
+| Per-paper md 格式 | `docs/papers/<PaperName>/paper-raw.md` (一手转录) + `<PaperName>.md` (二手笔记) |
+| Legacy pdf+txt 格式 | `docs/papers_raw/*.{pdf,txt}` 或 `papers/*.{pdf,txt}` |
+| 未约定 | `find . -name "*.pdf" -path "*paper*"` 或询问 user |
 
-**`imp_genai-d4rt-v1` 特别约定**：
+**Per-paper md 格式特别约定**（如果项目采用此 layout）：
 - 每个 paper 目录 `docs/papers/<PaperName>/` 下有两个核心 md：
   - `<PaperName>.md` —— 笔记 / 重点（user 个人整理，二手）
   - `paper-raw.md` —— **原文转录**（evidence 来源，一手）
-- 本项目 scope = `docs/papers/` 下打了 `tracking` / `feed forward reconstruction` / `4D data` 三个 topic 的所有 paper（见 `docs/papers/topics/topic - *.md`）
 - **paper 问题一律读 `paper-raw.md`**（不读 `<PaperName>.md` —— 那是二手）
 
-一般项目优先读 `.txt`（快速 grep）；需要看图表 / 公式时读 `.pdf`。
+Legacy pdf+txt 格式时：优先读 `.txt`（快速 grep）；需要看图表 / 公式时读 `.pdf`。
+
+> 当前 cluster 上具体哪些项目走哪种 layout（如 `imp_genai-d4rt-v1` / `TrackingModel_Gallery`），见 `optional/cluster-snippets/paper-evidence-projects.md`。
 
 ### 2. 读取证据
 
@@ -93,12 +94,12 @@ Read(<paper>.pdf, pages="3-5")
 
 ## 本规则 + 项目 wiki 的分层
 
-**`imp_genai-d4rt-v1`**（paper-per-folder md 格式）：
+**Paper-per-folder md 格式**（推荐 layout）：
 - `docs/papers/<PaperName>/paper-raw.md` — **一手原文**（evidence 来源）
 - `docs/papers/<PaperName>/<PaperName>.md` — 二手笔记（user 个人整理）
 - `docs/papers/topics/topic - <name>.md` — topic 索引（跨 paper 主题聚合）
 
-**其他项目**（pdf+txt 格式）：
+**Legacy pdf+txt 格式**：
 - `docs/papers/by-paper/<name>.md` — 项目维护的 wiki，**二手整理**
 - `docs/papers/papers_raw/<name>.{pdf,txt}` — **一手原文**（evidence 来源）
 
@@ -106,6 +107,8 @@ Read(<paper>.pdf, pages="3-5")
 1. 用户问问题 → 读**原文**（`paper-raw.md` 或 `papers_raw/`）
 2. 原文给不出 → 看二手笔记作为补充 context，但必须**标注**"二手内容，非原文"
 3. 发现二手与原文冲突 → 修二手 + 在 CHANGELOG 记录
+
+> 项目特定的 layout 实证（当前 cluster 上的 `imp_genai-d4rt-v1` 等）见 `optional/cluster-snippets/paper-evidence-projects.md`。
 
 ## Quick checklist（回答前自查）
 

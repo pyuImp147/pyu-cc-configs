@@ -8,11 +8,10 @@ Total files: ~40 (excluding `.git/`, `.gitignore`)
 
 | Target path (in this repo) | Source path | Why portable |
 |---|---|---|
-| `core/CLAUDE.md` | `~/.claude/CLAUDE.md` (slice: OMC 块以外 + SLURM 块以外) | 人格 / Tooling / Language / Philosophy / Core Principles / Explanation Guideline / Paper Questions / Documentation / Safety / Tool gotchas — 跨 host 通用工作习惯 |
-| `core/memory/MEMORY.md` | `~/.claude/projects/-mnt-home-pengcheng-yu-code/memory/MEMORY.md` | 项目级 auto-memory index（保留与 feedback 文件的引用关系） |
-| `core/memory/MEMORY-legacy.md` | `~/.claude/memory/MEMORY.md` | 早期顶层 memory（与项目级不同，含 markdown style feedback 引用） |
-| `core/memory/feedback_md_toc.md` | `~/.claude/memory/feedback_md_toc.md` | Markdown TOC 偏好规则 — 跨环境通用 |
+| `core/CLAUDE.md` | `~/.claude/CLAUDE.md` (slice: OMC 块以外 + SLURM 块以外，Paper Questions 项目特定 lookup 已挪出) | 人格 / Tooling / Language / Philosophy / Core Principles / Explanation Guideline / Paper Questions (通用) / Documentation / Safety / Tool gotchas |
+| `core/memory/feedback_md_toc.md` | `~/.claude/memory/feedback_md_toc.md` | Markdown TOC 偏好规则 — 跨环境通用（项目路径 reference 已 genericize） |
 | `core/memory/feedback_data_convention_direct_test.md` | `~/.claude/projects/-mnt-home-pengcheng-yu-code/memory/` | 数据约定要 raw→physical 闭环测试 — 跨环境通用 |
+| `core/skills-templates/pyu-harness-setup-generic/SKILL.md` | 基于原 `pyu-harness-setup` 抽象 | env-agnostic 版 harness bootstrap skill；剥离 CoreWeave / conda env `imp_genai` 假设 |
 | `core/README.md` | (新写) | Module 文档 |
 
 ## rules/
@@ -29,7 +28,7 @@ Total files: ~40 (excluding `.git/`, `.gitignore`)
 | `rules/common/agents.md` | 同 | 同 |
 | `rules/common/patterns.md` | 同 | 同 |
 | `rules/common/performance.md` | 同 | 同 |
-| `rules/common/paper-evidence.md` | 同 | 含项目路径但规则核心跨环境（private repo 保留） |
+| `rules/common/paper-evidence.md` | 同 | 已 genericize：项目特定 lookup 移到 `optional/cluster-snippets/paper-evidence-projects.md` |
 | `rules/python/coding-style.md` | `~/.claude/rules/python/coding-style.md` | Python 通用 |
 | `rules/python/testing.md` | 同 | 同 |
 | `rules/python/security.md` | 同 | 同 |
@@ -37,22 +36,24 @@ Total files: ~40 (excluding `.git/`, `.gitignore`)
 | `rules/python/hooks.md` | 同 | 同 |
 | `rules/README.md` | (新写) | Module 文档 |
 
-## skills/ (user-authored only)
+## skills/ (env-agnostic user-authored only)
 
 | Target | Source | SLURM 依赖 | mac 可用? |
 |---|---|---|---|
-| `skills/pyu-harness-setup/` | `~/.claude/skills/pyu-harness-setup/` | 弱 | ✅ |
 | `skills/pyu-delete/` | `~/.claude/skills/pyu-delete/` | 强 (sbatch) | ❌ |
 | `skills/pyu-exp-monitor/` | `~/.claude/skills/pyu-exp-monitor/` | 强 (squeue) | ❌ |
 | `skills/pyu-exp-team/` | `~/.claude/skills/pyu-exp-team/` | 强 | ❌ |
 | `skills/pyu-traj-vis/` | `~/.claude/skills/pyu-traj-vis/` | 无 | ✅ |
 | `skills/README.md` | (新写) | - | - |
 
+> `pyu-harness-setup` 已 fork：env-agnostic 骨架在 `core/skills-templates/pyu-harness-setup-generic/`；原 CoreWeave 深耦合版在 `optional/cluster-snippets/skills/pyu-harness-setup-coreweave/`。
+
 筛选方法（source check）:
 ```bash
 comm -23 <(ls ~/.claude/skills/ | sort) \
          <(find ~/.claude/plugins/cache -mindepth 3 -maxdepth 5 -type d -name skills -exec ls {} \; | sort -u)
-# 输出 6 项：5 个 pyu-* + 1 个 learned (后者是空目录，continuous-learning 尚未沉淀，不同步)
+# 输出 6 项：5 个 pyu-* + 1 个 learned (后者是空目录，不同步)
+# pyu-harness-setup 因深度耦合 CoreWeave，从 skills/ 移到 cluster-snippets/skills/ + 抽象到 core/skills-templates/
 ```
 
 ## optional/cluster-snippets/
@@ -60,6 +61,8 @@ comm -23 <(ls ~/.claude/skills/ | sort) \
 | Target | Source | 何时使用 |
 |---|---|---|
 | `optional/cluster-snippets/cluster-env.md` | `~/.claude/CLAUDE.md` SLURM 块 (L95-L139) + `~/.claude/cluster_env.md` 全文 + Safety 中 `/mnt/...` 两条 | 仅 SLURM cluster |
+| `optional/cluster-snippets/paper-evidence-projects.md` | 从 `rules/common/paper-evidence.md` 拆出的项目特定 lookup（imp_genai-d4rt-v1 / TrackingModel_Gallery） | 仅 CoreWeave host（有对应项目 worktree） |
+| `optional/cluster-snippets/skills/pyu-harness-setup-coreweave/` | `~/.claude/skills/pyu-harness-setup/` 原版 + `CLUSTER_NOTE.md` | 仅 CoreWeave（深度耦合 conda env `imp_genai` + 共享盘约定） |
 | `optional/cluster-snippets/memory/feedback_sbatch_active_monitor.md` | `~/.claude/projects/-mnt-home-pengcheng-yu-code/memory/` | 仅 SLURM cluster (sbatch 强相关) |
 | `optional/cluster-snippets/memory/feedback_hardlink_vs_symlink_check.md` | 同上目录 | 仅 cluster (shared storage 场景) |
 | `optional/cluster-snippets/memory/feedback_pyu_delete_no_size_probe.md` | 同 | 仅 cluster (/pyu-delete 仅 SLURM 有意义) |
@@ -76,11 +79,13 @@ comm -23 <(ls ~/.claude/skills/ | sort) \
 
 ## 同步范围合规检查
 
-- [x] 5 个 user-authored skills 全部包含（源端有 6 项但 `learned/` 为空目录，跳过）
-- [x] 12 个 common rules + 5 个 python rules，全部包含
-- [x] CLAUDE.md 已拆分：portable 部分 → `core/CLAUDE.md`；cluster 部分 → `optional/cluster-snippets/cluster-env.md`
-- [x] Memory 文件按 cluster-coupled / portable 拆分到 core/ vs optional/
+- [x] 4 个 env-agnostic user-authored skills 在 `skills/`；1 个 CoreWeave 深耦合 skill (`pyu-harness-setup`) fork 为 generic + coreweave 两版
+- [x] 12 个 common rules + 5 个 python rules；`paper-evidence.md` 已 genericize（项目特定 lookup 进 cluster snippet）
+- [x] CLAUDE.md 已拆分：portable 部分 → `core/CLAUDE.md`；cluster 部分 → `optional/cluster-snippets/cluster-env.md`；项目特定 Paper Questions lookup → `optional/cluster-snippets/paper-evidence-projects.md`
+- [x] Memory 文件按 cluster-coupled / portable 拆分到 core/ vs optional/；`feedback_md_toc.md` 中 `imp_genai-d4rt-v1` reference 已 genericize
 - [x] cluster_env.md 全文已并入 cluster snippet
 - [x] OMC 自动管理块（`<!-- OMC:START --> ... <!-- OMC:END -->`）已剔除（OMC 重装会写回）
-- [x] `.gitignore` 防 runtime 垃圾 + secrets
+- [x] `MEMORY.md` (auto-memory index) 不同步 — Claude 在新 host 自动重建
+- [x] `.gitignore` 防 runtime 垃圾 + secrets + `.omc/`
 - [x] 无 `__pycache__/` 残留
+- [x] **二次 audit grep**：portable 区无 `imp_genai` / `CoreWeave` / `sbatch` / `/mnt/data` / `/mnt/home` / `/opt/conda` 的实质性引用（仅剩下指向 cluster snippet 的"see X"指针）

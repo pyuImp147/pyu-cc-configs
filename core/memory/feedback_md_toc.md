@@ -4,7 +4,7 @@ description: When writing .md docs, follow user's bilingual academic-blog style 
 type: feedback
 ---
 
-When creating or fully rewriting any `.md` document for the user (research notes, system docs, paper notes, project READMEs, etc.), follow this style. Reference: `~/code/imp_genai-d4rt-v1/research/scene4d/feed_forward_tracker/docs/{harness,workflow,repo-structure}.md` are canonical examples.
+When creating or fully rewriting any `.md` document for the user (research notes, system docs, paper notes, project READMEs, etc.), follow this style. See `core/CLAUDE.md` § Documentation for the high-level constraint (Type 1 vs Type 2 doc); the conventions below are the concrete style guide.
 
 ## Required structure (top to bottom)
 

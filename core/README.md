@@ -5,10 +5,11 @@
 | 文件 | 源（当前 cluster） | 内容 |
 |---|---|---|
 | `CLAUDE.md` | `~/.claude/CLAUDE.md` 里 OMC 块**之外**、SLURM 块**之外**的部分 | Identity / Tooling / Language / Philosophy / Core Principles / Explanation Guideline / Paper Questions / Documentation / Safety / Tool usage gotchas |
-| `memory/MEMORY.md` | `~/.claude/projects/-mnt-home-pengcheng-yu-code/memory/MEMORY.md` | auto-memory index |
-| `memory/MEMORY-legacy.md` | `~/.claude/memory/MEMORY.md` | 早期 auto-memory（保留参考） |
 | `memory/feedback_md_toc.md` | `~/.claude/memory/feedback_md_toc.md` | markdown TOC 偏好（跨环境通用） |
 | `memory/feedback_data_convention_direct_test.md` | `~/.claude/projects/-mnt-home-pengcheng-yu-code/memory/` | data convention 验证准则（跨环境通用） |
+| `skills-templates/pyu-harness-setup-generic/` | (新写，基于原 pyu-harness-setup 抽象) | env-agnostic 版 harness bootstrap skill；CoreWeave 版在 `optional/cluster-snippets/skills/` |
+
+> `MEMORY.md` (auto-memory index) **不**同步。Claude 在新 host 上启动后会按目录里的 feedback 文件**自动重建** index，预先拷一份反而易过时。
 
 ## 不包含什么（移到 cluster snippet 或被排除）
 
@@ -16,6 +17,7 @@
 - ❌ `## SLURM Cluster (CoreWeave)` 整段 (L95-L139) → 移到 `optional/cluster-snippets/cluster-env.md`
 - ❌ `## Safety` 里 `/mnt/data/` 与 `/mnt/home/pengcheng.yu/` 两条 → 移到 cluster snippet
 - ❌ cluster-only feedback (`feedback_sbatch_active_monitor.md` / `feedback_hardlink_vs_symlink_check.md` / `feedback_pyu_delete_no_size_probe.md`) → 移到 cluster snippet
+- ❌ `MEMORY.md` 顶层 index → 不同步，由 Claude 在新 host 自动重建
 
 ## Merge 到新 host
 
@@ -43,6 +45,6 @@ cp ~/pyu-claude-all/core/memory/*.md $PROJ_MEM/
 
 ## 预期失效模式
 
-- `Paper Questions` 里写死了项目路径（`imp_genai-d4rt-v1` / `TrackingModel_Gallery`）—— 新 host 上如果对应项目不存在，那段规则约束的 grep target 不存在但规则本身仍正确；无需修改。
+- `Paper Questions` 现在只含通用规则；项目特定 lookup（`imp_genai-d4rt-v1` / `TrackingModel_Gallery`）已挪到 `optional/cluster-snippets/paper-evidence-projects.md`，只在 CoreWeave 环境 cat 进来。
 - `Documentation` 里提到 `selfEvo doc rewrite cycles` —— 是历史 lesson learned 记录，跨环境通用。
 - `Tool usage gotchas` 里讲 Edit/Write 必须 Read —— 是 Claude Code 通用 harness 行为，所有 host 都适用。

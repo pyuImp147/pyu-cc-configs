@@ -9,11 +9,16 @@ comm -23 <(ls ~/.claude/skills/ | sort) \
          <(find ~/.claude/plugins/cache -mindepth 3 -maxdepth 5 -type d -name skills -exec ls {} \; | sort -u)
 ```
 
-在源 cluster 上跑这条命令的结果是 6 项，其中 `learned/` 是空目录（continuous-learning v2 还没沉淀出 instinct），不同步；其余 5 个 user-authored skill 全部包含。
+在源 cluster 上跑这条命令的结果是 6 项。**裁切后**：
+- `learned/` 是空目录（continuous-learning v2 还没沉淀出 instinct），不同步
+- `pyu-harness-setup/` 深度耦合 CoreWeave + conda env `imp_genai`，**fork 为两版**：
+  - 原版 → `optional/cluster-snippets/skills/pyu-harness-setup-coreweave/`（仅在 CoreWeave 上 merge）
+  - 环境无关骨架 → `core/skills-templates/pyu-harness-setup-generic/`（mac / 其他 cluster 用）
+
+本目录下保留的是**剩余 4 个**用户自写 skill：
 
 | Skill | SLURM 依赖 | mac 上能跑? | 说明 |
 |---|---|---|---|
-| `pyu-harness-setup` | 弱（提到 CoreWeave 但逻辑不强绑） | ✅ 可跑（生成项目骨架） | 给新 research 项目搭 self-enforcing harness |
 | `pyu-delete` | **强**（sbatch 多节点并行 rm） | ❌ 报错 | 高并发删除 SLURM 集群上大目录树 |
 | `pyu-exp-monitor` | **强**（squeue + scontrol） | ❌ 报错 | SLURM 实验监控 |
 | `pyu-exp-team` | **强**（squeue + auto-fix sbatch） | ❌ 报错 | 长时运行 + 自动 fix 失败 SLURM job |
@@ -33,4 +38,4 @@ cp -r ~/pyu-claude-all/skills/* ~/.claude/skills/
 
 ## 校验
 
-在新 host 上 `ls ~/.claude/skills/` 应该看到 5 个新增条目。`/pyu-harness-setup` slash command 在 cluster 和 mac 上都应该能起，触发 deep-interview 流程。
+在新 host 上 `ls ~/.claude/skills/` 应该看到 4 个新增条目（本目录）+ 1 个 `pyu-harness-setup`（从 generic 或 coreweave 版本之一拷贝）。`/pyu-harness-setup` slash command 在 cluster 和 mac 上都应该能起，触发 deep-interview 流程。
